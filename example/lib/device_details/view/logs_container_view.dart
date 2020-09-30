@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ble_lib_example/device_details/device_details_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LogsContainerView extends StatelessWidget {
@@ -54,7 +55,8 @@ class LogsContainerView extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
+              Container(
+                width: 80,
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
                   logs.data[index].time,

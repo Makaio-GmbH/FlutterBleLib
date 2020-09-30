@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_ble_lib_example/local_notifications.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 import 'package:flutter_ble_lib_example/model/ble_device.dart';
-
+import 'package:background_fetch/background_fetch.dart';
 import 'devices_bloc.dart';
 import 'devices_bloc_provider.dart';
 import 'hex_painter.dart';
+
 
 typedef DeviceTapListener = void Function();
 
@@ -19,6 +21,125 @@ class DevicesListScreen extends StatefulWidget {
 class DeviceListScreenState extends State<DevicesListScreen> {
   DevicesBloc _devicesBloc;
   StreamSubscription _appStateSubscription;
+
+  @override
+  void initState() {
+    Notifications.register(context);
+
+    _configureGeolocation();
+
+    super.initState();
+  }
+
+
+  void _configureGeolocation() {
+// 50.2399241,8.6093047,
+    bg.BackgroundGeolocation.addGeofence(bg.Geofence(
+        identifier: "Home",
+        radius: 200,
+        latitude: 50.2399241,
+        longitude: 8.6093047,
+        notifyOnEntry: true,
+        notifyOnExit: true,
+        extras: {
+          "route_id": 1234
+        }
+    )).then((bool success) {
+      print('[addGeofence] success');
+    }).catchError((dynamic error) {
+      print('[addGeofence] FAILURE: $error');
+    });
+
+    bg.BackgroundGeolocation.addGeofence(bg.Geofence(
+        identifier: "Office",
+        radius: 200,
+        latitude: 50.2238097,
+        longitude: 8.6192321,
+        notifyOnEntry: true,
+        notifyOnExit: true,
+        extras: {
+          "route_id": 1234
+        }
+    )).then((bool success) {
+      print('[addGeofence] success');
+    }).catchError((dynamic error) {
+      print('[addGeofence] FAILURE: $error');
+    });
+
+// Step 1:  Configure BackgroundFetch as usual.
+    BackgroundFetch.configure(BackgroundFetchConfig(
+        minimumFetchInterval: 15
+    ), (String taskId) async {
+      // This is the fetch-event callback.
+      print("[BackgroundFetch] taskId: $taskId");
+
+      // Use a switch statement to route task-handling.
+      switch (taskId) {
+        case 'com.transistorsoft.customtask':
+          print("Received custom task");
+          break;
+        default:
+          print("Default fetch task");
+      }
+      // Finish, providing received taskId.
+      BackgroundFetch.finish(taskId);
+    });
+
+// Step 2:  Schedule a custom "oneshot" task "com.transistorsoft.customtask" to execute 5000ms from now.
+    BackgroundFetch.scheduleTask(TaskConfig(
+        taskId: "com.transistorsoft.customtask",
+        delay: 5000  // <-- milliseconds
+    ));
+
+
+
+
+
+    ////
+    // 1.  Listen to events (See docs for all 12 available events).
+    //
+
+    // Fired whenever a location is recorded
+    bg.BackgroundGeolocation.onLocation((bg.Location location) {
+      print('[location] - $location');
+    });
+
+    // Fired whenever the plugin changes motion-state (stationary->moving and vice-versa)
+    bg.BackgroundGeolocation.onMotionChange((bg.Location location) {
+      print('[motionchange] - $location');
+    });
+
+    // Fired whenever the state of location-services changes.  Always fired at boot
+    bg.BackgroundGeolocation.onProviderChange((bg.ProviderChangeEvent event) {
+      print('[providerchange] - $event');
+    });
+
+    bg.BackgroundGeolocation.onHeartbeat((bg.HeartbeatEvent event) {
+      print('[onHeartbeat] ${event}');
+
+    });
+
+    ////
+    // 2.  Configure the plugin
+    //
+    bg.BackgroundGeolocation.ready(bg.Config(
+        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
+        distanceFilter: 10.0,
+        stopOnTerminate: false,
+        startOnBoot: true,
+        debug: true,
+        disableStopDetection: true,
+        heartbeatInterval: 60,
+        logLevel: bg.Config.LOG_LEVEL_VERBOSE
+    )).then((bg.State state) {
+      if (!state.enabled) {
+        ////
+        // 3.  Start the plugin.
+        //
+        bg.BackgroundGeolocation.start();
+      }
+    });
+  }
 
   @override
   void didUpdateWidget(DevicesListScreen oldWidget) {
@@ -62,6 +183,7 @@ class DeviceListScreenState extends State<DevicesListScreen> {
   @override
   Widget build(BuildContext context) {
     Fimber.d("build DeviceListScreenState");
+    _devicesBloc.refresh();
     if (_shouldRunOnResume) {
       _shouldRunOnResume = false;
       _onResume();

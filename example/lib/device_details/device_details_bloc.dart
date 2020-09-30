@@ -5,6 +5,7 @@ import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:flutter_ble_lib_example/model/ble_device.dart';
 import 'package:flutter_ble_lib_example/repository/device_repository.dart';
 import 'package:flutter_ble_lib_example/test_scenarios/test_scenarios.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DeviceDetailsBloc {
@@ -46,7 +47,7 @@ class DeviceDetailsBloc {
       _logs.insert(
           0,
           DebugLog(
-            '${now.hour}:${now.minute}:${now.second}.${now.millisecond}',
+              new DateFormat("HH:mm:ss").format(now) + ".${now.millisecond.toString()}",
             text,
           ));
       Fimber.d(text);

@@ -1,35 +1,72 @@
 PODS:
-  - Flutter (1.0.0)
-  - flutter_ble_lib (2.2.3):
+  - background_fetch (0.5.5):
     - Flutter
-    - MultiplatformBleAdapter (= 0.1.5)
+  - blemulator (1.1.1):
+    - Flutter
+    - MultiplatformBleAdapter (~> 0.1.5)
+  - CocoaLumberjack (3.6.1):
+    - CocoaLumberjack/Core (= 3.6.1)
+  - CocoaLumberjack/Core (3.6.1)
+  - device_info (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - flutter_background_geolocation (1.7.3):
+    - CocoaLumberjack (~> 3.6.0)
+    - Flutter
+  - flutter_ble_lib (2.2.4):
+    - Flutter
+    - MultiplatformBleAdapter (~> 0.1.5)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - MultiplatformBleAdapter (0.1.5)
-  - "permission_handler (4.2.0+hotfix.3)":
+  - "permission_handler (5.0.0+hotfix.6)":
     - Flutter
 
 DEPENDENCIES:
+  - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
+  - blemulator (from `.symlinks/plugins/blemulator/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
+  - flutter_background_geolocation (from `.symlinks/plugins/flutter_background_geolocation/ios`)
   - flutter_ble_lib (from `.symlinks/plugins/flutter_ble_lib/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
 
 SPEC REPOS:
   trunk:
+    - CocoaLumberjack
     - MultiplatformBleAdapter
 
 EXTERNAL SOURCES:
+  background_fetch:
+    :path: ".symlinks/plugins/background_fetch/ios"
+  blemulator:
+    :path: ".symlinks/plugins/blemulator/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: Flutter
+  flutter_background_geolocation:
+    :path: ".symlinks/plugins/flutter_background_geolocation/ios"
   flutter_ble_lib:
     :path: ".symlinks/plugins/flutter_ble_lib/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
 
 SPEC CHECKSUMS:
+  background_fetch: 733393ca9893eadff0f7297a3818afe57fd68cb1
+  blemulator: aedfaa5a8b8e5197e953cea4a59129e550fe6258
+  CocoaLumberjack: b17ae15142558d08bbacf69775fa10c4abbebcc9
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_ble_lib: 20e79f0b1d78d921d9ed68ab4451e190029bc3d9
+  flutter_background_geolocation: e753e2fbc3bca957510c3e79107b2abad3b3d081
+  flutter_ble_lib: ff02e3a782af6431ed0a2b5bef325ec041604b2e
+  flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   MultiplatformBleAdapter: 3c4391d428382738a47662ae1f665a29ce78ff39
-  permission_handler: 40520ab8ad1bb78a282b832464e995ec87f77ec6
+  permission_handler: b7a0953389e699927c6217933754cdcd0fa2c5a7
 
 PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1
